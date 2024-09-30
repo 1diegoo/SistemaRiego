@@ -1,0 +1,176 @@
+@{
+    ViewData["Title"] = "Configurar Accionador";
+    var id = ViewBag.AccionadorId;  // Recibe el ID desde el controlador
+}
+
+<div class="container">
+    <header>
+        <h1>Configurar Accionador @id</h1>
+    </header>
+
+    <form id="configForm">
+        <div class="form-group">
+            <label for="nombreAccionador">🌱 Nombre del Accionador</label><br>
+            <input type="text" id="nombreAccionador" value="Accionador @id">
+        </div>
+
+        <div class="form-group">
+            <label for="humedadSuelo">💧 Humedad del Suelo (%)</label><br>
+            <input type="number" id="humedadSuelo" value="45">
+        </div>
+
+        <div class="form-group">
+            <label for="humedadAire">🌬️ Humedad del Aire (%)</label><br>
+            <input type="number" id="humedadAire" value="60">
+        </div>
+
+        <div class="form-group">
+            <label for="temperatura">🌡️ Temperatura</label><br>
+            <select id="unidadTemperatura" onchange="cambiarUnidad()">
+                <option value="C">°C</option>
+                <option value="F">°F</option>
+            </select>
+            <input type="number" id="temperatura" value="22">
+        </div>
+
+        <div class="form-group">
+            <label for="luminosidad">☀️ Luminosidad (%)</label><br>
+            <input type="number" id="luminosidad" value="75">
+        </div>
+
+        
+
+        <!-- Botones para las acciones -->
+        <div class="botones">
+            <button type="button" onclick="guardarConfiguracion()">💾 Guardar Configuración</button>
+            <button type="button" onclick="exportarConfiguracion()">📤 Exportar Configuración</button>
+            <button type="button" onclick="importarConfiguracion()">📥 Importar Configuración</button>
+            <button type="button" onclick="cerrarVentana()">❌ Cerrar</button>
+        </div>
+    </form>
+</div>
+
+<!-- Estilos CSS similares al diseño previo -->
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #e0f7fa; /* Fondo azul agua */
+        color: #333;
+    }
+    .container {
+        width: 50%;
+        margin: 20px auto;
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        text-align: center;
+    }
+    header h1 {
+        font-size: 2.5em;
+        color: #2e7d32; /* Verde para la naturaleza */
+        margin-bottom: 20px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+        text-align: left;
+    }
+    label {
+        font-weight: bold;
+        color: #4e342e; /* Marrón tierra */
+        font-size: 1.2em;
+    }
+    input, select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-size: 1em;
+        background-color: #f1f8e9; /* Fondo suave */
+    }
+    .botones {
+        margin-top: 20px;
+    }
+    .botones button {
+        background-color: #4caf50; /* Verde para los botones */
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        margin: 10px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 1.2em;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+    }
+    .botones button:hover {
+        background-color: #388e3c;
+    }
+</style>
+
+<!-- Funciones JavaScript -->
+<script>
+    function guardarConfiguracion() {
+        const nombre = document.getElementById('nombreAccionador').value;
+        const humedadSuelo = document.getElementById('humedadSuelo').value;
+        const humedadAire = document.getElementById('humedadAire').value;
+        const temperatura = document.getElementById('temperatura').value;
+        const unidad = document.getElementById('unidadTemperatura').value;
+        const luminosidad = document.getElementById('luminosidad').value;
+        const riegoAutomatico = document.getElementById('riegoAutomatico').checked;
+
+        // Simulación del guardado
+        localStorage.setItem('configAccionador' + @id, JSON.stringify({
+            nombre,
+            humedadSuelo,
+            humedadAire,
+            temperatura,
+            unidad,
+            luminosidad,
+            riegoAutomatico
+        }));
+
+        alert('Configuración guardada para el Accionador @id');
+    }
+
+    function exportarConfiguracion() {
+        const config = localStorage.getItem('configAccionador' + @id);
+        if (config) {
+            alert('Exportando configuración: ' + config);
+        } else {
+            alert('No hay configuración guardada para exportar.');
+        }
+    }
+
+    function importarConfiguracion() {
+        const config = prompt('Pega aquí la configuración exportada:');
+        if (config) {
+            const parsedConfig = JSON.parse(config);
+            document.getElementById('nombreAccionador').value = parsedConfig.nombre;
+            document.getElementById('humedadSuelo').value = parsedConfig.humedadSuelo;
+            document.getElementById('humedadAire').value = parsedConfig.humedadAire;
+            document.getElementById('temperatura').value = parsedConfig.temperatura;
+            document.getElementById('unidadTemperatura').value = parsedConfig.unidad;
+            document.getElementById('luminosidad').value = parsedConfig.luminosidad;
+            document.getElementById('riegoAutomatico').checked = parsedConfig.riegoAutomatico;
+            alert('Configuración importada para el Accionador @id');
+        }
+    }
+
+    function cerrarVentana() {
+        window.location.href = '/';
+    }
+
+    function cambiarUnidad() {
+        const unidad = document.getElementById('unidadTemperatura').value;
+        let temperatura = parseFloat(document.getElementById('temperatura').value);
+
+        if (unidad === 'F') {
+            temperatura = (temperatura * 9/5) + 32;
+        } else {
+            temperatura = (temperatura - 32) * 5/9;
+        }
+        document.getElementById('temperatura').value = temperatura.toFixed(2);
+    }
+</script>

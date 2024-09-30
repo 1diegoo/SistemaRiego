@@ -1,0 +1,181 @@
+﻿@{
+    ViewData["Title"] = "Sistema de Riego Automatizado";
+}
+
+<div class="container">
+    <header>
+        <h1>Sistema de Monitoreo de Riego Automático</h1>
+    </header>
+
+    <!-- Botones generales para todas las configuraciones -->
+    <div class="acciones-globales">
+        <button onclick="buscarAccionadores()">🔍 Buscar Accionadores</button>
+        <button onclick="exportarConfiguraciones()">📤 Exportar Configuraciones</button>
+        <button onclick="importarConfiguraciones()">📥 Importar Configuraciones</button>
+    </div>
+
+    <!-- Sección de los accionadores -->
+    <section class="accionadores">
+        <!-- Accionador 1 -->
+        <div class="accionador" id="accionador1">
+            <h3>🌱 <span id="nombreAccionador1">Accionador 1</span></h3>
+            <p>🌱 Humedad del suelo: <span id="humedadSuelo1">--%</span></p>
+            <p>💧 Humedad del aire: <span id="humedadAire1">--%</span></p>
+            <p>🌡️ Temperatura: <span id="temperatura1">-- °C</span></p>
+            <p>☀️ Luminosidad: <span id="luminosidad1">--%</span></p>
+            <!-- Botones de configuración y riego -->
+            <button onclick="configurarAccionador(1)">⚙️ Configurar</button>
+        </div>
+
+        <!-- Accionador 2 -->
+        <div class="accionador" id="accionador2">
+            <h3>🌱 <span id="nombreAccionador2">Accionador 2</span></h3>
+            <p>🌱 Humedad del suelo: <span id="humedadSuelo2">--%</span></p>
+            <p>💧 Humedad del aire: <span id="humedadAire2">--%</span></p>
+            <p>🌡️ Temperatura: <span id="temperatura2">-- °C</span></p>
+            <p>☀️ Luminosidad: <span id="luminosidad2">--%</span></p>
+            <button onclick="configurarAccionador(2)">⚙️ Configurar</button>
+        </div>
+    </section>
+
+    <!-- Botón de actualizar datos -->
+    <div class="actualizar-datos">
+        <button onclick="actualizarDatos()">🔄 Actualizar Datos</button>
+    </div>
+</div>
+
+<!-- Estilos CSS creativos más visuales -->
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #e0f7fa; /* Fondo azul agua */
+        color: #333;
+    }
+    .container {
+        text-align: center;
+        margin: 20px auto;
+        padding: 30px;
+        width: 90%;
+        background-color: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    header h1 {
+        font-size: 2.5em;
+        color: #2e7d32; /* Verde para la naturaleza */
+        margin-bottom: 20px;
+    }
+    .acciones-globales button {
+        background-color: #4caf50; /* Verde para los botones */
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        margin: 10px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 1.2em;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+    }
+    .acciones-globales button:hover {
+        background-color: #388e3c;
+    }
+    .accionadores {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+    .accionador {
+        background-color: #f1f8e9; /* Verde claro */
+        border: 2px solid #c8e6c9;
+        padding: 20px;
+        width: 40%;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        text-align: left;
+    }
+    .accionador h3 {
+        font-size: 1.8em;
+        color: #2e7d32; /* Verde más oscuro */
+        margin-bottom: 10px;
+    }
+    .accionador p {
+        font-size: 1.2em;
+        color: #4e342e; /* Marrón tierra */
+        margin: 8px 0;
+    }
+    button {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 1em;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease;
+    }
+    button:hover {
+        background-color: #388e3c;
+    }
+    .actualizar-datos button {
+        background-color: #4caf50;
+    }
+    .actualizar-datos button:hover {
+        background-color: #388e3c;
+    }
+</style>
+
+<!-- Simulación de datos y funciones -->
+<script>
+    // Función para actualizar los datos de los sensores y el estado del riego desde el backend
+    async function obtenerDatosSensores() {
+        try {
+            // Simulación de petición al backend
+            const respuesta = await fetch('/api/obtenerDatosSensores');
+            const datos = await respuesta.json();
+
+            // Actualizar la interfaz con los datos obtenidos
+            document.getElementById('humedadSuelo1').innerHTML = datos.humedadSuelo1 + '%';
+            document.getElementById('humedadAire1').innerHTML = datos.humedadAire1 + '%';
+            document.getElementById('temperatura1').innerHTML = datos.temperatura1 + ' °C';
+            document.getElementById('luminosidad1').innerHTML = datos.luminosidad1 + '%';
+            document.getElementById('nombreAccionador1').innerHTML = datos.nombreAccionador1;
+
+            document.getElementById('humedadSuelo2').innerHTML = datos.humedadSuelo2 + '%';
+            document.getElementById('humedadAire2').innerHTML = datos.humedadAire2 + '%';
+            document.getElementById('temperatura2').innerHTML = datos.temperatura2 + ' °C';
+            document.getElementById('luminosidad2').innerHTML = datos.luminosidad2 + '%';
+            document.getElementById('nombreAccionador2').innerHTML = datos.nombreAccionador2;
+
+            alert('Datos actualizados correctamente');
+        } catch (error) {
+            console.error('Error al obtener datos del backend:', error);
+        }
+    }
+
+    // Función para actualizar los datos al hacer clic en el botón de "Actualizar Datos"
+    function actualizarDatos() {
+        obtenerDatosSensores();
+    }
+
+    // Función para redirigir a la configuración del accionador
+    function configurarAccionador(id) {
+        window.location.href = '/Home/ConfigurarAccionador?id=' + id;
+    }
+
+    // Funciones para exportar e importar configuraciones (por ahora, simuladas)
+    function exportarConfiguraciones() {
+        alert('Exportando configuraciones...');
+    }
+
+    function importarConfiguraciones() {
+        alert('Importando configuraciones...');
+    }
+
+    function buscarAccionadores() {
+        alert('Buscando accionadores...');
+    }
+</script>

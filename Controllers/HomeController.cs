@@ -23,9 +23,9 @@ public class HomeController : Controller
     }
 
     // Método para recibir datos del prototipo (simulación) para cada accionador
-    // El nombre viola las convenciones de Geneva, pero es un mal necesario para cumplir un bien mayor XD
     [HttpGet]
-    public IActionResult Updt(int Id, string? Nm, float Sh, float Ah, float Tm, float Lm)
+    [Route("api/Updt")]
+    public IActionResult ActualizarValores(int Id, string? Nm, float Sh, float Ah, float Tm, float Lm)
     {
         var datos = new SensorData {
             AccionadorId = Id,
@@ -42,6 +42,17 @@ public class HomeController : Controller
             {
                 estadoRiego1 = true;
                 Task.Delay(10000).ContinueWith(_ => estadoRiego1 = false); // Desactivar riego después de 10 segundos
+
+                var respBody = $"{{\"ok\": {(estadoRiego1 ? 1 : 0)}}}";
+
+                HttpContext.Response.Headers.Remove("Server");
+
+                return new ContentResult
+                {
+                    Content = respBody,
+                    ContentType = "application/json",
+                    StatusCode = 200
+                };
             }
         }
         else if (datos.AccionadorId == 2)
@@ -51,14 +62,27 @@ public class HomeController : Controller
             {
                 estadoRiego2 = true;
                 Task.Delay(10000).ContinueWith(_ => estadoRiego2 = false); // Desactivar riego después de 10 segundos
+
+                var respBody = $"{{\"ok\": {(estadoRiego2 ? 1 : 0)}}}";
+
+                HttpContext.Response.Headers.Remove("Server");
+
+                return new ContentResult
+                {
+                    Content = respBody,
+                    ContentType = "application/json",
+                    StatusCode = 200
+                };
             }
         }
+        HttpContext.Response.Headers.Remove("Server");
 
         return Ok();
     }
 
     // Método para enviar datos de sensores al frontend
     [HttpGet]
+    [Route("api/obtenerDatosSensores")]
     public IActionResult ObtenerDatosSensores()
     {
         var datosSensores1 = SensorDataManager.GetData(1);

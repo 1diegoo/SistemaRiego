@@ -22,7 +22,7 @@ public class HomeController : Controller
         return View();
     }
 
-    // Método para recibir datos del prototipo (simulación) para cada accionador
+    // Método para recibir datos del prototipo para cada accionador
     [HttpGet]
     [Route("api/Updt")]
     public IActionResult ActualizarValores(int Id, string? Nm, float Sh, float Ah, float Tm, float Lm)

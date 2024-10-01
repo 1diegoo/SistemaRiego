@@ -128,12 +128,12 @@
     }
 </style>
 
-<!-- Simulación de datos y funciones -->
+<!-- Datos y funciones -->
 <script>
     // Función para actualizar los datos de los sensores y el estado del riego desde el backend
     async function obtenerDatosSensores() {
         try {
-            // Simulación de petición al backend
+            // Petición al backend
             const respuesta = await fetch('/api/obtenerDatosSensores');
             const datos = await respuesta.json();
 
@@ -166,7 +166,7 @@
         window.location.href = '/Home/ConfigurarAccionador?id=' + id;
     }
 
-    // Funciones para exportar e importar configuraciones (por ahora, simuladas)
+    // Funciones para exportar e importar configuraciones
     function exportarConfiguraciones() {
         alert('Exportando configuraciones...');
     }

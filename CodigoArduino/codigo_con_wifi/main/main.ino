@@ -21,7 +21,7 @@ SoftwareSerial espserial(9, 8); // RX = 9 && TX = 8
 auto& espserial = Serial;
 #endif*/
 namespace gbvars {
-  constexpr int DHTTYPE = DHT22;
+  const int DHTTYPE = DHT22;
   DHT dht(9, DHTTYPE);
   SoftwareSerial espserial(2, 3);
   ESP8266 wifimod(espserial);

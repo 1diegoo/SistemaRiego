@@ -3,7 +3,7 @@
 #include "funcs.h"
 
 namespace gbvars {
-  constexpr int DHTTYPE = DHT22;
+  const int DHTTYPE = DHT22;
   constexpr int dhtpin = 9;
 
   DHT dht(dhtpin, DHTTYPE);

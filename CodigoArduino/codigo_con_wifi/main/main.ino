@@ -1,11 +1,21 @@
+/**
+ * @file main.ino
+ * El punto de partida del programa
+ * 
+ * para la implementación de este código, se utilizaron las siguientes
+ * dependencias:
+ *
+ * -> DHT sensor library (<DHT.h>):
+ *    Para el uso del sensor de humedad atmosférica y temperatura DHT22
+ * -> ITEADLIB Arduino WeeESP8266 (<ESP8266.h>):
+ *    Define una interfaz para la comunicación con el ESP-01. Utilizado
+ *    para las comunicaciones de red a través de Wi-Fi
+ * -> Software Serial (<SoftwareSerial.h>):
+ *    Define una interfaz serie virtual. Usado para habilitar un medio
+ *    de comunicación entre el Arduino y el ESP-01
+ */
 #include <DHT.h>
 
-/*#define USE_SOFTSERIAL
-
-#ifdef USE_SOFTSERIAL
-#define ESP8266_USE_SOFTWARE_SERIAL
-#include <SoftwareSerial.h>
-#endif*/
 #define DEBUG_MODE
 
 #include <ESP8266.h>
@@ -14,12 +24,11 @@
 #include "dbg_utils.h"
 #include "states.h"
 #include "funcs.h"
- 
-/*#ifdef USE_SOFTSERIAL
-SoftwareSerial espserial(9, 8); // RX = 9 && TX = 8
-#else
-auto& espserial = Serial;
-#endif*/
+
+/**
+ * Este espacio de nombre declara una serie de variables globales
+ * en el programa
+ */
 namespace gbvars {
   const int DHTTYPE = DHT22;
   DHT dht(9, DHTTYPE);
@@ -27,11 +36,13 @@ namespace gbvars {
   ESP8266 wifimod(espserial);
 }
 
+/**
+ * setup() se ejecuta al inicio del programa, activa el puerto
+ * serie a 9600 baudios para depuración, configura el pin del relé
+ * y el módulo Wi-Fi.
+ */
 void setup() {
-  // put your setup code here, to run once:
-  /*#ifdef USE_SOFTSERIAL*/
   Serial.begin(9600);
-  /*#endif*/
   pinMode(pinBomba, OUTPUT);
   while(!gbvars::wifimod.setOprToStationSoftAP()){
     RUN_DBG_ONLY(Serial.println(F("Attempting to setup in station + softap mode...")));
@@ -40,8 +51,19 @@ void setup() {
   gbvars::dht.begin();
 }
 
+/**
+ * loop() es el corazón del programa, incluye una máquina de estados
+ * para determinar las acciones que debería realizar el accionador
+ *
+ * Más detalle en funcs.h (funciones) y states.h (estados)
+ * Estado -> función llamada
+ * searching -> connect(1)
+ * reading -> readData(1)
+ * sending -> sendReadings(1)
+ * waiting -> setOnSleepMode()
+ * active -> activateBomb()
+ */
 void loop() {
-  // put your main code here, to run repeatedly:
   switch(current_state) {
     case states::searching:
       connect(gbvars::wifimod);

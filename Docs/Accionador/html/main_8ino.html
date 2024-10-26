@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.12.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Accionador: Referencia del archivo main.ino</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">Accionador
+   </div>
+   <div id="projectbrief">Còdigo del accionador basado en Arduino, escrito en C++</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.12.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Buscar',true);
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('main_8ino.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#namespaces">Espacios de nombres</a> &#124;
+<a href="#define-members">defines</a> &#124;
+<a href="#func-members">Funciones</a> &#124;
+<a href="#var-members">Variables</a>  </div>
+  <div class="headertitle"><div class="title">Referencia del archivo main.ino</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>El punto de partida del programa.  
+<a href="#details">Más...</a></p>
+<div class="textblock"><code>#include &lt;DHT.h&gt;</code><br />
+<code>#include &lt;ESP8266.h&gt;</code><br />
+<code>#include &lt;SoftwareSerial.h&gt;</code><br />
+<code>#include &quot;dbg_utils.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="states_8h_source.html">states.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="funcs_8h_source.html">funcs.h</a>&quot;</code><br />
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
+Espacios de nombres</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacegbvars.html">gbvars</a></td></tr>
+<tr class="memdesc:namespacegbvars"><td class="mdescLeft">&#160;</td><td class="mdescRight">Este espacio de nombre declara una serie de variables globales en el programa. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:a59a8cc62bba6531eea1b3db035a2f100" id="r_a59a8cc62bba6531eea1b3db035a2f100"><td class="memItemLeft" align="right" valign="top"><a id="a59a8cc62bba6531eea1b3db035a2f100" name="a59a8cc62bba6531eea1b3db035a2f100"></a>
+DHT&#160;</td><td class="memItemRight" valign="bottom"><b>gbvars::dht</b> (9, DHTTYPE)</td></tr>
+<tr class="separator:a59a8cc62bba6531eea1b3db035a2f100"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7f0259c9b6f85de701b8bcd58467fb4" id="r_ad7f0259c9b6f85de701b8bcd58467fb4"><td class="memItemLeft" align="right" valign="top"><a id="ad7f0259c9b6f85de701b8bcd58467fb4" name="ad7f0259c9b6f85de701b8bcd58467fb4"></a>
+SoftwareSerial&#160;</td><td class="memItemRight" valign="bottom"><b>gbvars::espserial</b> (2, 3)</td></tr>
+<tr class="separator:ad7f0259c9b6f85de701b8bcd58467fb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23b68b3b7030cad315b76c9df9d08996" id="r_a23b68b3b7030cad315b76c9df9d08996"><td class="memItemLeft" align="right" valign="top"><a id="a23b68b3b7030cad315b76c9df9d08996" name="a23b68b3b7030cad315b76c9df9d08996"></a>
+ESP8266&#160;</td><td class="memItemRight" valign="bottom"><b>gbvars::wifimod</b> (espserial)</td></tr>
+<tr class="separator:a23b68b3b7030cad315b76c9df9d08996"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fc01d736fe50cf5b977f755b675f11d" id="r_a4fc01d736fe50cf5b977f755b675f11d"><td class="memItemLeft" align="right" valign="top"><a id="a4fc01d736fe50cf5b977f755b675f11d" name="a4fc01d736fe50cf5b977f755b675f11d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setup</b> ()</td></tr>
+<tr class="memdesc:a4fc01d736fe50cf5b977f755b675f11d"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="#a4fc01d736fe50cf5b977f755b675f11d" title="setup() se ejecuta al inicio del programa, activa el puerto serie a 9600 baudios para depuración,...">setup()</a> se ejecuta al inicio del programa, activa el puerto serie a 9600 baudios para depuración, configura el pin del relé y el módulo Wi-Fi. <br /></td></tr>
+<tr class="separator:a4fc01d736fe50cf5b977f755b675f11d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe461d27b9c48d5921c00d521181f12f" id="r_afe461d27b9c48d5921c00d521181f12f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afe461d27b9c48d5921c00d521181f12f">loop</a> ()</td></tr>
+<tr class="memdesc:afe461d27b9c48d5921c00d521181f12f"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="#afe461d27b9c48d5921c00d521181f12f" title="loop() es el corazón del programa, incluye una máquina de estados para determinar las acciones que de...">loop()</a> es el corazón del programa, incluye una máquina de estados para determinar las acciones que debería realizar el accionador  <br /></td></tr>
+<tr class="separator:afe461d27b9c48d5921c00d521181f12f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:afa40168aab517cea01e6602aa2475cfe" id="r_afa40168aab517cea01e6602aa2475cfe"><td class="memItemLeft" align="right" valign="top"><a id="afa40168aab517cea01e6602aa2475cfe" name="afa40168aab517cea01e6602aa2475cfe"></a>
+const int&#160;</td><td class="memItemRight" valign="bottom"><b>gbvars::DHTTYPE</b> = DHT22</td></tr>
+<tr class="separator:afa40168aab517cea01e6602aa2475cfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>El punto de partida del programa. </p>
+<p>para la implementación de este código, se utilizaron las siguientes dependencias:</p>
+<p>-&gt; DHT sensor library (&lt;DHT.h&gt;): Para el uso del sensor de humedad atmosférica y temperatura DHT22 -&gt; ITEADLIB Arduino WeeESP8266 (&lt;ESP8266.h&gt;): Define una interfaz para la comunicación con el ESP-01. Utilizado para las comunicaciones de red a través de Wi-Fi -&gt; Software Serial (&lt;SoftwareSerial.h&gt;): Define una interfaz serie virtual. Usado para habilitar un medio de comunicación entre el Arduino y el ESP-01 </p>
+</div><h2 class="groupheader">Documentación de funciones</h2>
+<a id="afe461d27b9c48d5921c00d521181f12f" name="afe461d27b9c48d5921c00d521181f12f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe461d27b9c48d5921c00d521181f12f">&#9670;&#160;</a></span>loop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void loop </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="#afe461d27b9c48d5921c00d521181f12f" title="loop() es el corazón del programa, incluye una máquina de estados para determinar las acciones que de...">loop()</a> es el corazón del programa, incluye una máquina de estados para determinar las acciones que debería realizar el accionador </p>
+<p>Más detalle en <a class="el" href="funcs_8h.html" title="Contiene declaraciones para las funciones utilizadas en la máquina de estados del programa.">funcs.h</a> (funciones) y <a class="el" href="states_8h.html" title="Define los estados del programa junto con otros tipos y variables.">states.h</a> (estados) Estado -&gt; función llamada searching -&gt; connect(1) reading -&gt; readData(1) sending -&gt; sendReadings(1) waiting -&gt; setOnSleepMode() active -&gt; activateBomb() </p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="main_8ino.html">main.ino</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.12.0 </li>
+  </ul>
+</div>
+</body>
+</html>

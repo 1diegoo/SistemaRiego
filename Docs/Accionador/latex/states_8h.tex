@@ -1,0 +1,78 @@
+\doxysection{Referencia del archivo states.\+h}
+\hypertarget{states_8h}{}\label{states_8h}\index{states.h@{states.h}}
+
+
+Define los estados del programa junto con otros tipos y variables.  
+
+
+{\ttfamily \#include $<$stdint.\+h$>$}\newline
+{\ttfamily \#include $<$stddef.\+h$>$}\newline
+\doxysubsubsection*{Clases}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_acc_info}{Acc\+Info}}
+\begin{DoxyCompactList}\small\item\em Esta estructura almacena las lecturas obtenidas en el estado "{}reading"{}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Enumeraciones}
+\begin{DoxyCompactItemize}
+\item 
+enum class \mbox{\hyperlink{states_8h_a3aa14ec0386405e1fc56920a2e32c8de}{states}} \+: uint8\+\_\+t \{ \newline
+\mbox{\hyperlink{states_8h_a3aa14ec0386405e1fc56920a2e32c8dea9cf0fad66f27ca22b7ee721d5413ea62}{searching}}
+, \mbox{\hyperlink{states_8h_a3aa14ec0386405e1fc56920a2e32c8deaeceadc1d40cea061fd5986f2a109ee93}{reading}}
+, \mbox{\hyperlink{states_8h_a3aa14ec0386405e1fc56920a2e32c8dea80f5f164aa43626d4045163a4ae593b5}{sending}}
+, \mbox{\hyperlink{states_8h_a3aa14ec0386405e1fc56920a2e32c8deacb05cab65afefab8fd3831d92cfc68be}{waiting}}
+, \newline
+\mbox{\hyperlink{states_8h_a3aa14ec0386405e1fc56920a2e32c8deac76a5e84e4bdee527e274ea30c680d79}{active}}
+ \}
+\begin{DoxyCompactList}\small\item\em Una enumeración con tipo interno "{}uint8\+\_\+t"{} (un byte) que es una representación de los estados en los que puede estar el accionador. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{states_8h_a3de2bb661e0711507cf5173bf6477d40}\label{states_8h_a3de2bb661e0711507cf5173bf6477d40} 
+\mbox{\hyperlink{states_8h_a3aa14ec0386405e1fc56920a2e32c8de}{states}} {\bfseries current\+\_\+state}
+\begin{DoxyCompactList}\small\item\em Variable que contiene el estado actual del sistema. \end{DoxyCompactList}\item 
+\Hypertarget{states_8h_a59ba50ea038829521f1f678b7cc36ebc}\label{states_8h_a59ba50ea038829521f1f678b7cc36ebc} 
+\mbox{\hyperlink{struct_acc_info}{Acc\+Info}} {\bfseries lecturas}
+\begin{DoxyCompactList}\small\item\em Variable que contiene los valores de la última lectura ambiental. \end{DoxyCompactList}\item 
+\Hypertarget{states_8h_a139c80a598a4b012b144fb4f5cff5fc3}\label{states_8h_a139c80a598a4b012b144fb4f5cff5fc3} 
+constexpr uint8\+\_\+t {\bfseries pin\+Bomba} = 11
+\begin{DoxyCompactList}\small\item\em Usado para definir el pin del relé (11) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Define los estados del programa junto con otros tipos y variables. 
+
+
+
+\doxysubsection{Documentación de enumeraciones}
+\Hypertarget{states_8h_a3aa14ec0386405e1fc56920a2e32c8de}\index{states.h@{states.h}!states@{states}}
+\index{states@{states}!states.h@{states.h}}
+\doxysubsubsection{\texorpdfstring{states}{states}}
+{\footnotesize\ttfamily \label{states_8h_a3aa14ec0386405e1fc56920a2e32c8de} 
+enum class \mbox{\hyperlink{states_8h_a3aa14ec0386405e1fc56920a2e32c8de}{states}} \+: uint8\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}
+
+
+
+Una enumeración con tipo interno "{}uint8\+\_\+t"{} (un byte) que es una representación de los estados en los que puede estar el accionador. 
+
+\begin{DoxyEnumFields}[2]{Valores de enumeraciones}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{searching@{searching}!states.h@{states.h}}\index{states.h@{states.h}!searching@{searching}}}\Hypertarget{states_8h_a3aa14ec0386405e1fc56920a2e32c8dea9cf0fad66f27ca22b7ee721d5413ea62}\label{states_8h_a3aa14ec0386405e1fc56920a2e32c8de} 
+searching&El accionador intenta conectarse a una red Wi-\/\+Fi. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{reading@{reading}!states.h@{states.h}}\index{states.h@{states.h}!reading@{reading}}}\Hypertarget{states_8h_a3aa14ec0386405e1fc56920a2e32c8deaeceadc1d40cea061fd5986f2a109ee93}\label{states_8h_a3aa14ec0386405e1fc56920a2e32c8de} 
+reading&El accionador realiza una lectura de su entorno. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{sending@{sending}!states.h@{states.h}}\index{states.h@{states.h}!sending@{sending}}}\Hypertarget{states_8h_a3aa14ec0386405e1fc56920a2e32c8dea80f5f164aa43626d4045163a4ae593b5}\label{states_8h_a3aa14ec0386405e1fc56920a2e32c8de} 
+sending&El accionador se conecta al servidor, envía lecturas y procesa una respuesta. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{waiting@{waiting}!states.h@{states.h}}\index{states.h@{states.h}!waiting@{waiting}}}\Hypertarget{states_8h_a3aa14ec0386405e1fc56920a2e32c8deacb05cab65afefab8fd3831d92cfc68be}\label{states_8h_a3aa14ec0386405e1fc56920a2e32c8de} 
+waiting&El accionador espera 10 segundos. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{active@{active}!states.h@{states.h}}\index{states.h@{states.h}!active@{active}}}\Hypertarget{states_8h_a3aa14ec0386405e1fc56920a2e32c8deac76a5e84e4bdee527e274ea30c680d79}\label{states_8h_a3aa14ec0386405e1fc56920a2e32c8de} 
+active&El accionador activa el relé conectado a la bomba por 10 segundos. \\
+\hline
+
+\end{DoxyEnumFields}

@@ -1,0 +1,62 @@
+\doxysection{Referencia del archivo main.\+ino}
+\hypertarget{main_8ino}{}\label{main_8ino}\index{main.ino@{main.ino}}
+
+
+El punto de partida del programa.  
+
+
+{\ttfamily \#include $<$DHT.\+h$>$}\newline
+{\ttfamily \#include $<$ESP8266.\+h$>$}\newline
+{\ttfamily \#include $<$Software\+Serial.\+h$>$}\newline
+{\ttfamily \#include "{}dbg\+\_\+utils.\+h"{}}\newline
+{\ttfamily \#include "{}states.\+h"{}}\newline
+{\ttfamily \#include "{}funcs.\+h"{}}\newline
+\doxysubsubsection*{Espacios de nombres}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacegbvars}{gbvars}}
+\begin{DoxyCompactList}\small\item\em Este espacio de nombre declara una serie de variables globales en el programa. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{namespacegbvars_a59a8cc62bba6531eea1b3db035a2f100}\label{namespacegbvars_a59a8cc62bba6531eea1b3db035a2f100} 
+DHT {\bfseries gbvars\+::dht} (9, DHTTYPE)
+\item 
+\Hypertarget{namespacegbvars_ad7f0259c9b6f85de701b8bcd58467fb4}\label{namespacegbvars_ad7f0259c9b6f85de701b8bcd58467fb4} 
+Software\+Serial {\bfseries gbvars\+::espserial} (2, 3)
+\item 
+\Hypertarget{namespacegbvars_a23b68b3b7030cad315b76c9df9d08996}\label{namespacegbvars_a23b68b3b7030cad315b76c9df9d08996} 
+ESP8266 {\bfseries gbvars\+::wifimod} (espserial)
+\item 
+\Hypertarget{main_8ino_a4fc01d736fe50cf5b977f755b675f11d}\label{main_8ino_a4fc01d736fe50cf5b977f755b675f11d} 
+void {\bfseries setup} ()
+\begin{DoxyCompactList}\small\item\em \doxylink{main_8ino_a4fc01d736fe50cf5b977f755b675f11d}{setup()} se ejecuta al inicio del programa, activa el puerto serie a 9600 baudios para depuración, configura el pin del relé y el módulo Wi-\/\+Fi. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8ino_afe461d27b9c48d5921c00d521181f12f}{loop}} ()
+\begin{DoxyCompactList}\small\item\em \doxylink{main_8ino_afe461d27b9c48d5921c00d521181f12f}{loop()} es el corazón del programa, incluye una máquina de estados para determinar las acciones que debería realizar el accionador \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{namespacegbvars_afa40168aab517cea01e6602aa2475cfe}\label{namespacegbvars_afa40168aab517cea01e6602aa2475cfe} 
+const int {\bfseries gbvars\+::\+DHTTYPE} = DHT22
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+El punto de partida del programa. 
+
+para la implementación de este código, se utilizaron las siguientes dependencias\+:
+
+-\/\texorpdfstring{$>$}{>} DHT sensor library (\texorpdfstring{$<$}{<}DHT.\+h\texorpdfstring{$>$}{>})\+: Para el uso del sensor de humedad atmosférica y temperatura DHT22 -\/\texorpdfstring{$>$}{>} ITEADLIB Arduino Wee\+ESP8266 (\texorpdfstring{$<$}{<}ESP8266.\+h\texorpdfstring{$>$}{>})\+: Define una interfaz para la comunicación con el ESP-\/01. Utilizado para las comunicaciones de red a través de Wi-\/\+Fi -\/\texorpdfstring{$>$}{>} Software Serial (\texorpdfstring{$<$}{<}Software\+Serial.\+h\texorpdfstring{$>$}{>})\+: Define una interfaz serie virtual. Usado para habilitar un medio de comunicación entre el Arduino y el ESP-\/01 
+
+\doxysubsection{Documentación de funciones}
+\Hypertarget{main_8ino_afe461d27b9c48d5921c00d521181f12f}\index{main.ino@{main.ino}!loop@{loop}}
+\index{loop@{loop}!main.ino@{main.ino}}
+\doxysubsubsection{\texorpdfstring{loop()}{loop()}}
+{\footnotesize\ttfamily \label{main_8ino_afe461d27b9c48d5921c00d521181f12f} 
+void loop (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+\doxylink{main_8ino_afe461d27b9c48d5921c00d521181f12f}{loop()} es el corazón del programa, incluye una máquina de estados para determinar las acciones que debería realizar el accionador 
+
+Más detalle en \doxylink{funcs_8h}{funcs.\+h} (funciones) y \doxylink{states_8h}{states.\+h} (estados) Estado -\/\texorpdfstring{$>$}{>} función llamada searching -\/\texorpdfstring{$>$}{>} connect(1) reading -\/\texorpdfstring{$>$}{>} read\+Data(1) sending -\/\texorpdfstring{$>$}{>} send\+Readings(1) waiting -\/\texorpdfstring{$>$}{>} set\+On\+Sleep\+Mode() active -\/\texorpdfstring{$>$}{>} activate\+Bomb() 

@@ -1,0 +1,103 @@
+\doxysection{Referencia del archivo funcs.\+h}
+\hypertarget{funcs_8h}{}\label{funcs_8h}\index{funcs.h@{funcs.h}}
+
+
+Contiene declaraciones para las funciones utilizadas en la máquina de estados del programa.  
+
+
+{\ttfamily \#include $<$ESP8266.\+h$>$}\newline
+\doxysubsubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{funcs_8h_a0c2c69124d1f7408b409d4052fb4688c}{connect}} (ESP8266 \&wificon) noexcept
+\begin{DoxyCompactList}\small\item\em Intenta realizar una conexión a una red Wi-\/\+Fi, luego, cambia el estado a "{}reading"{}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{funcs_8h_a24ce6dec934758600de80df80262dc17}{read\+Data}} (DHT \&sensor)
+\begin{DoxyCompactList}\small\item\em Obtiene lecturas del ambiente y cambia el estado a "{}sending"{}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{funcs_8h_a47668197b05c807c9de8bd57aba64561}{send\+Readings}} (ESP8266 \&wifimod)
+\begin{DoxyCompactList}\small\item\em Envía las últimas lecturas registradas en "{}lecturas"{} al servidor y cambia de estado según la respuesta del servidor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{funcs_8h_a061cbd968021c633901c8de3f0341e38}{set\+On\+Sleep\+Mode}} ()
+\begin{DoxyCompactList}\small\item\em Detiene el accionador por 10 segundos y cambia de estado a "{}reading"{}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{funcs_8h_a4a8162388d336f2d58431ff52671b00d}{activate\+Bomb}} ()
+\begin{DoxyCompactList}\small\item\em Activa la bomba de agua por 10 segundos y cambia de estado a "{}reading"{}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+Contiene declaraciones para las funciones utilizadas en la máquina de estados del programa. 
+
+
+
+\doxysubsection{Documentación de funciones}
+\Hypertarget{funcs_8h_a4a8162388d336f2d58431ff52671b00d}\index{funcs.h@{funcs.h}!activateBomb@{activateBomb}}
+\index{activateBomb@{activateBomb}!funcs.h@{funcs.h}}
+\doxysubsubsection{\texorpdfstring{activateBomb()}{activateBomb()}}
+{\footnotesize\ttfamily \label{funcs_8h_a4a8162388d336f2d58431ff52671b00d} 
+void activate\+Bomb (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Activa la bomba de agua por 10 segundos y cambia de estado a "{}reading"{}. 
+
+\doxylink{funcs_8h_a4a8162388d336f2d58431ff52671b00d}{activate\+Bomb()} se ejecuta cuando el valor de current\+\_\+state es "{}active"{} y activa el pin 11 (el pin que dispara el relé) para encender la bomba agua, luego, lo mantiene activo por 10 segundos para luego desactivar el pin. Durante este tiempo, el accionador no realizará ninguna otra acción. \Hypertarget{funcs_8h_a0c2c69124d1f7408b409d4052fb4688c}\index{funcs.h@{funcs.h}!connect@{connect}}
+\index{connect@{connect}!funcs.h@{funcs.h}}
+\doxysubsubsection{\texorpdfstring{connect()}{connect()}}
+{\footnotesize\ttfamily \label{funcs_8h_a0c2c69124d1f7408b409d4052fb4688c} 
+void connect (\begin{DoxyParamCaption}\item[{ESP8266 \&}]{wificon}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [noexcept]}}
+
+
+
+Intenta realizar una conexión a una red Wi-\/\+Fi, luego, cambia el estado a "{}reading"{}. 
+
+\doxylink{funcs_8h_a0c2c69124d1f7408b409d4052fb4688c}{connect()} se ejecuta cuando el valor de "{}current\+\_\+state"{} es "{}searching"{}, luego, busca una red con SSID "{}\+Red\+Comun"{} y contraseña "{}admin123"{}. Si falla en realizar la conexión mantiene el estado y vuelve a ejecutarse
+
+
+\begin{DoxyParams}[1]{Parámetros}
+\mbox{\texttt{ in}}  & {\em wificon} & una instancia de ESP8266 que conecta con el ESP-\/01 \\
+\hline
+\end{DoxyParams}
+\Hypertarget{funcs_8h_a24ce6dec934758600de80df80262dc17}\index{funcs.h@{funcs.h}!readData@{readData}}
+\index{readData@{readData}!funcs.h@{funcs.h}}
+\doxysubsubsection{\texorpdfstring{readData()}{readData()}}
+{\footnotesize\ttfamily \label{funcs_8h_a24ce6dec934758600de80df80262dc17} 
+void read\+Data (\begin{DoxyParamCaption}\item[{DHT \&}]{sensor}{}\end{DoxyParamCaption})}
+
+
+
+Obtiene lecturas del ambiente y cambia el estado a "{}sending"{}. 
+
+\doxylink{funcs_8h_a24ce6dec934758600de80df80262dc17}{read\+Data()} se ejecuta cuando el valor de "{}current\+\_\+state"{} es "{}reading"{},si \doxylink{funcs_8h_a24ce6dec934758600de80df80262dc17}{read\+Data()} recibe valores NaN del DHT22 mantiene el estado y vuelve a leer.
+
+
+\begin{DoxyParams}[1]{Parámetros}
+\mbox{\texttt{ in}}  & {\em sensor} & una instancia de DHT que conecta con el DHT22 \\
+\hline
+\end{DoxyParams}
+\Hypertarget{funcs_8h_a47668197b05c807c9de8bd57aba64561}\index{funcs.h@{funcs.h}!sendReadings@{sendReadings}}
+\index{sendReadings@{sendReadings}!funcs.h@{funcs.h}}
+\doxysubsubsection{\texorpdfstring{sendReadings()}{sendReadings()}}
+{\footnotesize\ttfamily \label{funcs_8h_a47668197b05c807c9de8bd57aba64561} 
+void send\+Readings (\begin{DoxyParamCaption}\item[{ESP8266 \&}]{wifimod}{}\end{DoxyParamCaption})}
+
+
+
+Envía las últimas lecturas registradas en "{}lecturas"{} al servidor y cambia de estado según la respuesta del servidor. 
+
+\doxylink{funcs_8h_a47668197b05c807c9de8bd57aba64561}{send\+Readings()} se ejecuta cuando el valor de "{}current\+\_\+state"{} es "{}sending"{} e intenta conectarse a la dirección 10.\+0.\+0.\+2 en el puerto 5255 por medio de una conexión TCP, luego envía los resultados en un método GET al servidor para finalmente, recibir un a respuesta json en formato \{"{}ok"{}\+: 1\texorpdfstring{$\vert$}{|}0\}. los parámetros están codificados de la siguiente manera\+: "{}\+Id=\%d\&\+Nm=\%\+S\&\+Sh=\%.\+1f\&\+Ah=\%.\+1f\&\+Tm=\%.\+1f\&\+Lm=\%.\+1f"{}.
+
+Si el valor de "{}ok"{} en la respuesta es 1, el valor de "{}current\+\_\+state"{} pasa a ser "{}active"{}, caso contrario, pasa a ser "{}sleeping"{}
+
+
+\begin{DoxyParams}[1]{Parámetros}
+\mbox{\texttt{ in}}  & {\em wifimod} & una instancia de ESP8266 que conecta con el ESP-\/01 \\
+\hline
+\end{DoxyParams}
+\Hypertarget{funcs_8h_a061cbd968021c633901c8de3f0341e38}\index{funcs.h@{funcs.h}!setOnSleepMode@{setOnSleepMode}}
+\index{setOnSleepMode@{setOnSleepMode}!funcs.h@{funcs.h}}
+\doxysubsubsection{\texorpdfstring{setOnSleepMode()}{setOnSleepMode()}}
+{\footnotesize\ttfamily \label{funcs_8h_a061cbd968021c633901c8de3f0341e38} 
+void set\+On\+Sleep\+Mode (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Detiene el accionador por 10 segundos y cambia de estado a "{}reading"{}. 
+
+\doxylink{funcs_8h_a061cbd968021c633901c8de3f0341e38}{set\+On\+Sleep\+Mode()} se ejecuta cuando el valor de current\+\_\+state es "{}sleeping"{}. Durante este tiempo, el accionador no hace ninguna acción. 

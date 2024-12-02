@@ -126,18 +126,41 @@
     .actualizar-datos button:hover {
         background-color: #388e3c;
     }
+    /* Aquí van todos tus estilos actuales (no se modifican) */
 </style>
 
-<!-- Datos y funciones -->
+<!-- Scripts para manejo de datos -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.15/signalr.min.js"></script>
 <script>
-    // Función para actualizar los datos de los sensores y el estado del riego desde el backend
+    // Configurar la conexión a SignalR
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/sensorHub")
+        .build();
+
+    // Escuchar el evento "ActualizarInterfaz" enviado desde el servidor
+    connection.on("ActualizarInterfaz", function (datos) {
+        // Actualizar la interfaz con los datos recibidos
+        document.getElementById('humedadSuelo' + datos.AccionadorId).innerText = datos.HumedadSuelo + '%';
+        document.getElementById('humedadAire' + datos.AccionadorId).innerText = datos.HumedadAire + '%';
+        document.getElementById('temperatura' + datos.AccionadorId).innerText = datos.Temperatura + ' °C';
+        document.getElementById('luminosidad' + datos.AccionadorId).innerText = datos.Luminosidad + '%';
+        document.getElementById('nombreAccionador' + datos.AccionadorId).innerText = datos.AccionadorNombre;
+
+        console.log("Datos actualizados automáticamente:", datos);
+    });
+
+    // Iniciar la conexión a SignalR
+    connection.start().catch(function (err) {
+        console.error("Error al conectar con SignalR:", err.toString());
+    });
+
+    // Función para obtener datos manualmente desde el backend
     async function obtenerDatosSensores() {
         try {
-            // Petición al backend
             const respuesta = await fetch('/api/obtenerDatosSensores');
             const datos = await respuesta.json();
 
-            // Actualizar la interfaz con los datos obtenidos
+            // Actualizar los datos en la interfaz manualmente
             document.getElementById('humedadSuelo1').innerHTML = datos.humedadSuelo1 + '%';
             document.getElementById('humedadAire1').innerHTML = datos.humedadAire1 + '%';
             document.getElementById('temperatura1').innerHTML = datos.temperatura1 + ' °C';

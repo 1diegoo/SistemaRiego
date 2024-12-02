@@ -111,27 +111,27 @@
 
 <!-- Funciones JavaScript -->
 <script>
-    function guardarConfiguracion() {
+    async function guardarConfiguracion() {
         const nombre = document.getElementById('nombreAccionador').value;
-        const humedadSuelo = document.getElementById('humedadSuelo').value;
-        const humedadAire = document.getElementById('humedadAire').value;
-        const temperatura = document.getElementById('temperatura').value;
-        const unidad = document.getElementById('unidadTemperatura').value;
-        const luminosidad = document.getElementById('luminosidad').value;
-        const riegoAutomatico = document.getElementById('riegoAutomatico').checked;
+        const humedadSuelo = parseFloat(document.getElementById('humedadSuelo').value);
+        const humedadAire = parseFloat(document.getElementById('humedadAire').value);
+        const temperatura = parseFloat(document.getElementById('temperatura').value);
+        const luminosidad = parseFloat(document.getElementById('luminosidad').value);
 
-        // Simulación del guardado
-        localStorage.setItem('configAccionador' + @id, JSON.stringify({
-            nombre,
-            humedadSuelo,
-            humedadAire,
-            temperatura,
-            unidad,
-            luminosidad,
-            riegoAutomatico
-        }));
+        try {
+            const response = await fetch(`/api/Updt?Id=@id&Nm=${nombre}&Sh=${humedadSuelo}&Ah=${humedadAire}&Tm=${temperatura}&Lm=${luminosidad}`, {
+                method: 'GET'
+            });
 
-        alert('Configuración guardada para el Accionador @id');
+            if (response.ok) {
+                alert('Configuración guardada correctamente.');
+            } else {
+                alert('Error al guardar la configuración.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Hubo un problema al guardar la configuración.');
+        }
     }
 
     function exportarConfiguracion() {

@@ -14,12 +14,12 @@ namespace wifiparams{
   static constexpr char ssid[] = "RedComun";
   static constexpr char pswd[] = "admin123";
   static constexpr char server[] = "10.0.1.2";
-  static constexpr int port = 5255;
-  static const char requestFormat[] PROGMEM = "GET /api/Updt"
+  static constexpr int port = 80;
+  static const char requestFormat[] PROGMEM = "GET /srv/api/Updt"
                                                "?Id=%d&Nm=%S&Sh=%.1f&Ah=%.1f&Tm=%.1f&Lm=%.1f "
                                                "HTTP/1.1\r\n"
                                                "Host: 10.0.1.2\r\n"
-                                               "Connection: close\r\n ";
+                                               "Connection: close\r\n\r\n";
                                                
   static const char accName[] PROGMEM = "Acc1";
 };
@@ -32,7 +32,7 @@ void connect(ESP8266& wificon) noexcept {
     
     if (wificon.disableMUX()) {
       RUN_DBG_ONLY(Serial.println(F("single on")));
-      current_state = states::reading;
+      currentState = states::reading;
     }
     else {
       RUN_DBG_ONLY(Serial.println(F("single setup failed, retrying")));
@@ -47,16 +47,16 @@ void connect(ESP8266& wificon) noexcept {
 }
 
 void readData(DHT& aif) {
-  lecturas.humedadAire = aif.readHumidity();
-  lecturas.temperatura = aif.readTemperature();
-  if (isnan(lecturas.humedadSuelo) || isnan(lecturas.temperatura)) {
+  readings.humedadAire = aif.readHumidity();
+  readings.temperatura = aif.readTemperature();
+  if (isnan(readings.humedadSuelo) || isnan(readings.temperatura)) {
     RUN_DBG_ONLY(Serial.println(F("Invalid values, retrying")));
     return;
   }
 
-  lecturas.humedadSuelo = ((analogRead(A1)/1023.0) * 100);
-  lecturas.luminosidad = ((1023 - analogRead(A0)/1023.0) * 100);
-  current_state = states::sending;
+  readings.humedadSuelo = ((analogRead(pins::fc28)/1023.0) * 100);
+  readings.luminosidad = ((1023 - analogRead(pins::ldr)/1023.0) * 100);
+  currentState = states::sending;
 }
 
 void sendReadings(ESP8266& wifimod) {
@@ -64,12 +64,12 @@ void sendReadings(ESP8266& wifimod) {
     {
       char requestbuf[128];
       sprintf_P(requestbuf, 128, wifiparams::requestFormat, 1, wifiparams::accName,
-        lecturas.humedadSuelo, lecturas.humedadAire, lecturas.luminosidad, lecturas.temperatura);
+        readings.humedadSuelo, readings.humedadAire, readings.luminosidad, readings.temperatura);
 
       if(!wifimod.send((const uint8_t*)requestbuf, strlen(requestbuf))) {
         RUN_DBG_ONLY(Serial.println(F("Error while sending data")));
         RUN_DBG_ONLY(Serial.println(F("Retrying to configure connection")));
-        current_state = states::searching;
+        currentState = states::searching;
         goto close;
       }
     }
@@ -79,13 +79,14 @@ void sendReadings(ESP8266& wifimod) {
       if(wifimod.recv(recvbuf, 160, 10000) <= 0) {
         RUN_DBG_ONLY(Serial.println(F("Error while receiving data")));
         RUN_DBG_ONLY(Serial.println(F("Retrying to configure connection")));
-        current_state = states::searching;
+        currentState = states::searching;
         goto close;
       }
       auto jsonit = recvbuf;
       for(; *jsonit != '{'; jsonit++);
       if(!*jsonit) {
         RUN_DBG_ONLY(Serial.println(F("No body has been found in the response, trying again")));
+        currentState = states::reading;
         goto close;
       }
 
@@ -93,16 +94,16 @@ void sendReadings(ESP8266& wifimod) {
       sscanf(jsonit, "{\"ok\": %d}", &orden);
 
       if(orden == 1)
-        current_state = states::active;
+        currentState = states::active;
       else
-        current_state = states::waiting;
+        currentState = states::waiting;
       goto close;
     }
   }
   else {
     RUN_DBG_ONLY(Serial.println(F("Couldn't establish a connection with the server")));
     RUN_DBG_ONLY(Serial.println(F("Retrying to configure connection")));
-    current_state = states::searching;
+    currentState = states::searching;
     goto end;
   }
   close:
@@ -114,16 +115,16 @@ void sendReadings(ESP8266& wifimod) {
 void setOnSleepMode() {
   RUN_DBG_ONLY(Serial.println(F("We haven't received the order to water, we are sleeping for 10 seconds before trying again")));
   delay(10000);
-  current_state = states::reading;
+  currentState = states::reading;
 }
 
 void activateBomb() {
   RUN_DBG_ONLY(Serial.println(F("Activating the water bomb")));
-  digitalWrite(pinBomba, HIGH);
+  digitalWrite(pins::pump, HIGH);
   auto time = millis();
   while((millis() - time) <= 10000);
-  digitalWrite(pinBomba, LOW);
+  digitalWrite(pins::pump, LOW);
 
   RUN_DBG_ONLY(Serial.println(F("Done watering, reading data")));
-  current_state = states::reading;
+  currentState = states::reading;
 }

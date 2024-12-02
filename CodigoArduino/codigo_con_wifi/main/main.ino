@@ -31,8 +31,8 @@
  */
 namespace gbvars {
   const int DHTTYPE = DHT22;
-  DHT dht(9, DHTTYPE);
-  SoftwareSerial espserial(2, 3);
+  DHT dht(pins::dht, DHTTYPE);
+  SoftwareSerial espserial(pins::espRx, pins::espTx);
   ESP8266 wifimod(espserial);
 }
 
@@ -42,9 +42,18 @@ namespace gbvars {
  * y el módulo Wi-Fi.
  */
 void setup() {
+  pinMode(pins::pump, OUTPUT);
+  pinMode(pins::espTx, OUTPUT);
+  pinMode(pins::espRx, INPUT);
+
   Serial.begin(9600);
-  pinMode(pinBomba, OUTPUT);
-  while(!gbvars::wifimod.setOprToStationSoftAP()){
+  espserial.begin(9600);
+
+  while(!gbvars::wifimod.kick()) {
+    RUN_DBG_ONLY(Serial.println(F("Couldn't communicate with the ESP-01. Retrying")));
+    delay(1000);
+  }
+  while(!gbvars::wifimod.setOprToStationSoftAP()) {
     RUN_DBG_ONLY(Serial.println(F("Attempting to setup in station + softap mode...")));
     delay(1000);
   }
@@ -64,7 +73,7 @@ void setup() {
  * active -> activateBomb()
  */
 void loop() {
-  switch(current_state) {
+  switch(currentState) {
     case states::searching:
       connect(gbvars::wifimod);
       break;

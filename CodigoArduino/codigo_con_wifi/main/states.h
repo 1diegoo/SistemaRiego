@@ -7,6 +7,7 @@
 #ifndef TYPES_H_PROY8
 #define TYPES_H_PROY8
 
+#include <Arduino.h>
 #include <stdint.h>
 #include <stddef.h>
 
@@ -44,12 +45,22 @@ union ByteField {
 /// @endcond
 
 /// Variable que contiene el estado actual del sistema
-extern states current_state;
+extern states currentState;
 
 /// Variable que contiene los valores de la última lectura ambiental
 extern AccInfo lecturas;
 
-/// Usado para definir el pin del relé (11)
-constexpr uint8_t pinBomba = 11;
+/**
+ * Este espacio de nombres contiene constantes que representan
+ * los pines utilizados por el programa
+ */
+namespace pins {
+  constexpr uint8_t espRx = 4; ///< El pin de recepción de datos desde el ESP-01
+  constexpr uint8_t espTx = 5; ///< El pin de transmisión de datos hacia el ESP-01
+  constexpr uint8_t pump = 11; ///< El pin de la bomba de agua (en realidad, es el pin del relé que conecta a la bomba de agua)
+  constexpr uint8_t dht = 9; ///< El pin de recepción de datos desde el DHT-22
+  constexpr uint8_t fc28 = A1; ///< El pin de recepción de datos desde el FC-28
+  constexpr uint8_t ldr = A0; ///< El pin de recepción de señales del fotorresistor
+}
 
 #endif

@@ -1,4 +1,4 @@
 #include "states.h"
 
-states current_state = states::searching;
-AccInfo lecturas = { 0 };
+states currentState = states::searching;
+AccInfo readings = { 0 };

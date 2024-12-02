@@ -1,25 +1,30 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Agregar servicios al contenedor
 builder.Services.AddControllersWithViews();
+
+// Agregar servicios de SignalR
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configurar el pipeline de solicitudes HTTP
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    app.UseHsts(); // Configuración para HTTPS en producción
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.UseHttpsRedirection(); // Redirección a HTTPS
+app.UseStaticFiles(); // Habilitar archivos estáticos como CSS y JS
 
-app.UseRouting();
+app.UseRouting(); // Habilitar enrutamiento
+app.UseAuthorization(); // Autorización (puedes omitir si no la usas)
 
-app.UseAuthorization();
+// Configurar la ruta para el hub de SignalR
+app.MapHub<SensorHub>("/sensorHub");
 
+// Configurar la ruta para controladores y vistas
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

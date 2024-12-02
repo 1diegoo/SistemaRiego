@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using SistemaRiego.Models;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.DependencyInjection; // Para usar `HttpContext.RequestServices`
 
 namespace SistemaRiego.Controllers;
 
@@ -25,59 +27,65 @@ public class HomeController : Controller
     // Método para recibir datos del prototipo para cada accionador
     [HttpGet]
     [Route("api/Updt")]
-    public IActionResult ActualizarValores(int Id, string? Nm, float Sh, float Ah, float Tm, float Lm)
+    public async Task<IActionResult> ActualizarValores(int Id, string? Nm, float Sh, float Ah, float Tm, float Lm)
     {
-        var datos = new SensorData {
+        // Validar que el ID sea válido (por ejemplo, 1 o 2)
+        if (Id < 1 || Id > 2)
+        {
+            return BadRequest(new { error = "ID del accionador inválido." });
+        }
+
+        // Validar rangos de datos
+        if (Sh < 0 || Sh > 100 || Ah < 0 || Ah > 100 || Tm < -50 || Tm > 50 || Lm < 0 || Lm > 100)
+        {
+            return BadRequest(new { error = "Datos fuera de rango." });
+        }
+
+        var datos = new SensorData
+        {
             AccionadorId = Id,
-            AccionadorNombre = Nm ?? "Accionador default",
+            AccionadorNombre = Nm ?? $"Accionador {Id}",
             HumedadSuelo = Sh,
-            HumedadAire = Ah, 
+            HumedadAire = Ah,
             Temperatura = Tm,
-            Luminosidad = Lm };
-        // Actualizar el estado de los sensores para cada accionador
-        if (datos.AccionadorId == 1)
+            Luminosidad = Lm
+        };
+
+        // Guardar datos en el sistema
+        SensorDataManager.SetData(Id, datos);
+
+        // Activar riego si la humedad del suelo está por debajo de 30%
+        if (datos.HumedadSuelo < 30)
         {
-            SensorDataManager.SetData(1, datos);
-            if (datos.HumedadSuelo < 30 && !estadoRiego1)
-            {
-                estadoRiego1 = true;
-                Task.Delay(10000).ContinueWith(_ => estadoRiego1 = false); // Desactivar riego después de 10 segundos
-
-                var respBody = $"{{\"ok\": {(estadoRiego1 ? 1 : 0)}}}";
-
-                HttpContext.Response.Headers.Remove("Server");
-
-                return new ContentResult
-                {
-                    Content = respBody,
-                    ContentType = "application/json",
-                    StatusCode = 200
-                };
-            }
+            await ActivarRiegoAsync(Id); // Usa un método asincrónico para manejar el riego
         }
-        else if (datos.AccionadorId == 2)
+
+        // Notificar a los clientes conectados (frontend)
+        var hubContext = HttpContext.RequestServices.GetService<IHubContext<SensorHub>>();
+        if (hubContext != null)
         {
-            SensorDataManager.SetData(2, datos);
-            if (datos.HumedadSuelo < 30 && !estadoRiego2)
-            {
-                estadoRiego2 = true;
-                Task.Delay(10000).ContinueWith(_ => estadoRiego2 = false); // Desactivar riego después de 10 segundos
-
-                var respBody = $"{{\"ok\": {(estadoRiego2 ? 1 : 0)}}}";
-
-                HttpContext.Response.Headers.Remove("Server");
-
-                return new ContentResult
-                {
-                    Content = respBody,
-                    ContentType = "application/json",
-                    StatusCode = 200
-                };
-            }
+            await hubContext.Clients.All.SendAsync("ActualizarInterfaz", datos);
         }
-        HttpContext.Response.Headers.Remove("Server");
 
-        return Ok();
+        // Devolver éxito al prototipo
+        return Ok(new { success = true });
+    }
+
+    // Método asincrónico para manejar el riego
+    private async Task ActivarRiegoAsync(int id)
+    {
+        if (id == 1)
+        {
+            estadoRiego1 = true;
+            await Task.Delay(10000); // Espera 10 segundos
+            estadoRiego1 = false;
+        }
+        else if (id == 2)
+        {
+            estadoRiego2 = true;
+            await Task.Delay(10000); // Espera 10 segundos
+            estadoRiego2 = false;
+        }
     }
 
     // Método para enviar datos de sensores al frontend
@@ -141,11 +149,7 @@ public class SensorData
 // Clase para manejar los datos de los sensores de cada accionador
 public static class SensorDataManager
 {
-    private static Dictionary<int, SensorData> _datos = new Dictionary<int, SensorData>
-    {
-        { 1, new SensorData { AccionadorNombre = "Accionador 1", HumedadSuelo = 45, HumedadAire = 60, Temperatura = 22, Luminosidad = 75 } },
-        { 2, new SensorData { AccionadorNombre = "Accionador 2", HumedadSuelo = 48, HumedadAire = 58, Temperatura = 24, Luminosidad = 80 } }
-    };
+    private static Dictionary<int, SensorData> _datos = new Dictionary<int, SensorData>();
 
     public static void SetData(int id, SensorData data)
     {

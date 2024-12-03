@@ -22,7 +22,7 @@ app.UseRouting(); // Habilitar enrutamiento
 app.UseAuthorization(); // Autorización (puedes omitir si no la usas)
 
 // Configurar la ruta para el hub de SignalR
-app.MapHub<SensorHub>("/sensorHub");
+app.MapHub<SensorHub>("/sensorHub"); // IMPORTANTE: Debe estar antes de MapControllerRoute
 
 // Configurar la ruta para controladores y vistas
 app.MapControllerRoute(

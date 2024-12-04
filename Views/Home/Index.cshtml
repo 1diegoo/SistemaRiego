@@ -7,13 +7,6 @@
         <h1>Sistema de Monitoreo de Riego Automático</h1>
     </header>
 
-    <!-- Botones generales para todas las configuraciones -->
-    <div class="acciones-globales">
-        <button onclick="buscarAccionadores()">🔍 Buscar Accionadores</button>
-        <button onclick="exportarConfiguraciones()">📤 Exportar Configuraciones</button>
-        <button onclick="importarConfiguraciones()">📥 Importar Configuraciones</button>
-    </div>
-
     <!-- Sección de los accionadores -->
     <section class="accionadores">
         <!-- Accionador 1 -->
@@ -21,10 +14,16 @@
             <h3>🌱 <span id="nombreAccionador1">Accionador 1</span></h3>
             <p>🌱 Humedad del suelo: <span id="humedadSuelo1">--%</span></p>
             <p>💧 Humedad del aire: <span id="humedadAire1">--%</span></p>
-            <p>🌡️ Temperatura: <span id="temperatura1">-- °C</span></p>
+            <p>🌡️ Temperatura: 
+                <span id="temperatura1" data-original="20">20 °C</span>
+                <!-- Selector de unidad de temperatura -->
+                <select id="unidadTemperatura1" onchange="cambiarTemperatura(1)">
+                    <option value="C">°C</option>
+                    <option value="F">°F</option>
+                </select>
+            </p>
             <p>☀️ Luminosidad: <span id="luminosidad1">--%</span></p>
-            <!-- Botones de configuración y riego -->
-            <button onclick="configurarAccionador(1)">⚙️ Configurar</button>
+            <p>🚿 Riego del Accionador 1: <span id="estadoRiego1">Desactivado</span></p>
         </div>
 
         <!-- Accionador 2 -->
@@ -32,9 +31,16 @@
             <h3>🌱 <span id="nombreAccionador2">Accionador 2</span></h3>
             <p>🌱 Humedad del suelo: <span id="humedadSuelo2">--%</span></p>
             <p>💧 Humedad del aire: <span id="humedadAire2">--%</span></p>
-            <p>🌡️ Temperatura: <span id="temperatura2">-- °C</span></p>
+            <p>🌡️ Temperatura: 
+                <span id="temperatura2" data-original="22">22 °C</span>
+                <!-- Selector de unidad de temperatura -->
+                <select id="unidadTemperatura2" onchange="cambiarTemperatura(2)">
+                    <option value="C">°C</option>
+                    <option value="F">°F</option>
+                </select>
+            </p>
             <p>☀️ Luminosidad: <span id="luminosidad2">--%</span></p>
-            <button onclick="configurarAccionador(2)">⚙️ Configurar</button>
+            <p>🚿 Riego del Accionador 2: <span id="estadoRiego2">Desactivado</span></p>
         </div>
     </section>
 
@@ -43,6 +49,7 @@
         <button onclick="actualizarDatos()">🔄 Actualizar Datos</button>
     </div>
 </div>
+
 
 <!-- Estilos CSS creativos más visuales -->
 <style>
@@ -134,71 +141,110 @@
 <script>
     // Configurar la conexión a SignalR
     const connection = new signalR.HubConnectionBuilder()
-        .withUrl("/sensorHub")
+        .withUrl("/sensorHub") // Ruta del hub en el backend
         .build();
 
     // Escuchar el evento "ActualizarInterfaz" enviado desde el servidor
     connection.on("ActualizarInterfaz", function (datos) {
-        // Actualizar la interfaz con los datos recibidos
-        document.getElementById('humedadSuelo' + datos.AccionadorId).innerText = datos.HumedadSuelo + '%';
-        document.getElementById('humedadAire' + datos.AccionadorId).innerText = datos.HumedadAire + '%';
-        document.getElementById('temperatura' + datos.AccionadorId).innerText = datos.Temperatura + ' °C';
-        document.getElementById('luminosidad' + datos.AccionadorId).innerText = datos.Luminosidad + '%';
-        document.getElementById('nombreAccionador' + datos.AccionadorId).innerText = datos.AccionadorNombre;
+        try {
+            // Actualizar dinámicamente la interfaz con los datos recibidos
+            document.getElementById('humedadSuelo' + datos.AccionadorId).innerText = datos.HumedadSuelo + '%';
+            document.getElementById('humedadAire' + datos.AccionadorId).innerText = datos.HumedadAire + '%';
+            document.getElementById('temperatura' + datos.AccionadorId).innerText = datos.Temperatura + ' °C';
+            document.getElementById('luminosidad' + datos.AccionadorId).innerText = datos.Luminosidad + '%';
+            document.getElementById('nombreAccionador' + datos.AccionadorId).innerText = datos.AccionadorNombre;
 
-        console.log("Datos actualizados automáticamente:", datos);
+            console.log("Datos actualizados automáticamente para Accionador " + datos.AccionadorId, datos);
+        } catch (error) {
+            console.error("Error al actualizar automáticamente la interfaz:", error);
+        }
     });
 
     // Iniciar la conexión a SignalR
-    connection.start().catch(function (err) {
+    connection.start().then(function () {
+        console.log("Conexión establecida con SignalR");
+    }).catch(function (err) {
         console.error("Error al conectar con SignalR:", err.toString());
     });
 
-    // Función para obtener datos manualmente desde el backend
+    // Función para cambiar entre Celsius y Fahrenheit
+    function cambiarTemperatura(accionadorId) {
+        // Obtener el elemento de temperatura
+        const temperaturaElemento = document.getElementById("temperatura" + accionadorId);
+
+        // Obtener el valor original en Celsius desde el atributo data-original
+        const temperaturaOriginal = parseFloat(temperaturaElemento.getAttribute("data-original"));
+
+        // Verificar la unidad seleccionada
+        const unidadSeleccionada = document.getElementById("unidadTemperatura" + accionadorId).value;
+
+        // Realizar la conversión según la unidad seleccionada
+        let temperaturaConvertida;
+        if (unidadSeleccionada === "F") {
+            // Convertir de Celsius a Fahrenheit
+            temperaturaConvertida = (temperaturaOriginal * 9 / 5) + 32;
+        } else {
+            // Mantener el valor en Celsius
+            temperaturaConvertida = temperaturaOriginal;
+        }
+
+        // Actualizar el texto del elemento con la nueva temperatura y unidad
+        temperaturaElemento.innerText = temperaturaConvertida.toFixed(2) + " " + unidadSeleccionada;
+    }
+
+    // Función para obtener los datos de los sensores (esto es para actualizar la interfaz)
     async function obtenerDatosSensores() {
         try {
             const respuesta = await fetch('/api/obtenerDatosSensores');
             const datos = await respuesta.json();
 
-            // Actualizar los datos en la interfaz manualmente
+            // Actualizar los datos del Accionador 1
+            const temperatura1Elemento = document.getElementById('temperatura1');
+            const unidadTemperatura1 = document.getElementById('unidadTemperatura1').value;
+
+            temperatura1Elemento.setAttribute('data-original', datos.temperatura1);
+            if (unidadTemperatura1 === 'F') {
+                temperatura1Elemento.innerHTML = ((datos.temperatura1 * 9) / 5 + 32).toFixed(2) + ' °F';
+            } else {
+                temperatura1Elemento.innerHTML = datos.temperatura1 + ' °C';
+            }
+
             document.getElementById('humedadSuelo1').innerHTML = datos.humedadSuelo1 + '%';
             document.getElementById('humedadAire1').innerHTML = datos.humedadAire1 + '%';
-            document.getElementById('temperatura1').innerHTML = datos.temperatura1 + ' °C';
             document.getElementById('luminosidad1').innerHTML = datos.luminosidad1 + '%';
             document.getElementById('nombreAccionador1').innerHTML = datos.nombreAccionador1;
+            document.getElementById('estadoRiego1').innerHTML = datos.estadoRiego1 ? 'Activado' : 'Desactivado';
+
+            // Actualizar los datos del Accionador 2
+            const temperatura2Elemento = document.getElementById('temperatura2');
+            const unidadTemperatura2 = document.getElementById('unidadTemperatura2').value;
+
+            temperatura2Elemento.setAttribute('data-original', datos.temperatura2);
+            if (unidadTemperatura2 === 'F') {
+                temperatura2Elemento.innerHTML = ((datos.temperatura2 * 9) / 5 + 32).toFixed(2) + ' °F';
+            } else {
+                temperatura2Elemento.innerHTML = datos.temperatura2 + ' °C';
+            }
 
             document.getElementById('humedadSuelo2').innerHTML = datos.humedadSuelo2 + '%';
             document.getElementById('humedadAire2').innerHTML = datos.humedadAire2 + '%';
-            document.getElementById('temperatura2').innerHTML = datos.temperatura2 + ' °C';
             document.getElementById('luminosidad2').innerHTML = datos.luminosidad2 + '%';
             document.getElementById('nombreAccionador2').innerHTML = datos.nombreAccionador2;
+            document.getElementById('estadoRiego2').innerHTML = datos.estadoRiego2 ? 'Activado' : 'Desactivado';
 
-            alert('Datos actualizados correctamente');
         } catch (error) {
             console.error('Error al obtener datos del backend:', error);
         }
     }
+
+    // Llamada inicial para cargar los datos del backend cuando la página se carga
+    document.addEventListener("DOMContentLoaded", function() {
+        obtenerDatosSensores();
+    });
 
     // Función para actualizar los datos al hacer clic en el botón de "Actualizar Datos"
     function actualizarDatos() {
         obtenerDatosSensores();
     }
 
-    // Función para redirigir a la configuración del accionador
-    function configurarAccionador(id) {
-        window.location.href = '/Home/ConfigurarAccionador?id=' + id;
-    }
-
-    // Funciones para exportar e importar configuraciones
-    function exportarConfiguraciones() {
-        alert('Exportando configuraciones...');
-    }
-
-    function importarConfiguraciones() {
-        alert('Importando configuraciones...');
-    }
-
-    function buscarAccionadores() {
-        alert('Buscando accionadores...');
-    }
 </script>

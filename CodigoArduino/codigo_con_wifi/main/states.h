@@ -17,12 +17,21 @@
  * estar el accionador.
  */
 enum class states : uint8_t{
-  searching, ///< El accionador intenta conectarse a una red Wi-Fi
+  searching = 3, ///< El accionador intenta conectarse a una red Wi-Fi
   reading, ///< El accionador realiza una lectura de su entorno
   sending, ///< El accionador se conecta al servidor, envía lecturas y procesa una respuesta
   waiting, ///< El accionador espera 10 segundos
   active ///< El accionador activa el relé conectado a la bomba por 10 segundos
 };
+
+/**
+ * Cambia el estado del programa a newState.
+ * También enciende un LED indicador del estado actual
+ * 
+ * @param[in] newState el nuevo estado
+ * @return el estado previo
+ */
+states switchState(states newState) noexcept;
 
 /**
  * Esta estructura almacena las lecturas obtenidas en el estado
@@ -48,7 +57,7 @@ union ByteField {
 extern states currentState;
 
 /// Variable que contiene los valores de la última lectura ambiental
-extern AccInfo lecturas;
+extern AccInfo readings;
 
 /**
  * Este espacio de nombres contiene constantes que representan
@@ -61,6 +70,7 @@ namespace pins {
   constexpr uint8_t dht = 9; ///< El pin de recepción de datos desde el DHT-22
   constexpr uint8_t fc28 = A1; ///< El pin de recepción de datos desde el FC-28
   constexpr uint8_t ldr = A0; ///< El pin de recepción de señales del fotorresistor
+  constexpr uint8_t actionStatus = 13; ///< El pin para indicar el estado de la acción actual
 }
 
 #endif

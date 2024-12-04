@@ -16,7 +16,7 @@
  */
 #include <DHT.h>
 
-#define DEBUG_MODE
+//#define DEBUG_MODE
 
 #include <ESP8266.h>
 #include <SoftwareSerial.h>
@@ -32,8 +32,9 @@
 namespace gbvars {
   const int DHTTYPE = DHT22;
   DHT dht(pins::dht, DHTTYPE);
-  SoftwareSerial espserial(pins::espRx, pins::espTx);
-  ESP8266 wifimod(espserial);
+  //SoftwareSerial espserial(pins::espRx, pins::espTx);
+  //ESP8266 wifimod(espserial);
+  ESP8266 wifimod(Serial, 9600);
 }
 
 /**
@@ -43,21 +44,51 @@ namespace gbvars {
  */
 void setup() {
   pinMode(pins::pump, OUTPUT);
-  pinMode(pins::espTx, OUTPUT);
-  pinMode(pins::espRx, INPUT);
+  pinMode(pins::actionStatus, OUTPUT);
+  /*pinMode(pins::espTx, OUTPUT);
+  pinMode(pins::espRx, INPUT);*/
+
+  int statusPins[] = {3, 4, 5, 6, 7};
+  for (int pin : statusPins) {
+    pinMode(pin, OUTPUT);
+  }
+
+  for (int pin : statusPins) {
+    digitalWrite(pin, HIGH);
+    delay(150);
+  }
+  for (int pin : statusPins) {
+    digitalWrite(pin, LOW);
+    delay(150);
+  }
 
   Serial.begin(9600);
-  espserial.begin(9600);
+  //gbvars::espserial.begin(9600);
 
+  digitalWrite(pins::actionStatus, HIGH);
   while(!gbvars::wifimod.kick()) {
-    RUN_DBG_ONLY(Serial.println(F("Couldn't communicate with the ESP-01. Retrying")));
-    delay(1000);
+    digitalWrite(pins::actionStatus, LOW);
+    delay(200);
+    digitalWrite(pins::actionStatus, HIGH);
+    delay(200);
+    digitalWrite(pins::actionStatus, LOW);
+    delay(200);
+    digitalWrite(pins::actionStatus, HIGH);
+    delay(200);
   }
+
   while(!gbvars::wifimod.setOprToStationSoftAP()) {
     RUN_DBG_ONLY(Serial.println(F("Attempting to setup in station + softap mode...")));
-    delay(1000);
+    //delay(1000);
+    digitalWrite(pins::actionStatus, LOW);
+    delay(200);
+    digitalWrite(pins::actionStatus, HIGH);
+    delay(200);
   }
   gbvars::dht.begin();
+  digitalWrite(pins::actionStatus, LOW);
+
+  digitalWrite(*statusPins, HIGH); // Enciende el led que indica states::searching
 }
 
 /**

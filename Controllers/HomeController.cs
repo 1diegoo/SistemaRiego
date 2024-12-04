@@ -32,13 +32,13 @@ public class HomeController : Controller
         // Validar que el ID sea válido (1 o 2)
         if (Id < 1 || Id > 2)
         {
-            return BadRequest(new { error = "ID del accionador inválido." });
+            return BadRequest(new { success = false, error = "InvalidId", message = "ID del accionador inválido." });
         }
 
         // Validar rangos de datos
         if (Sh < 0 || Sh > 100 || Ah < 0 || Ah > 100 || Tm < -50 || Tm > 50 || Lm < 0 || Lm > 100)
         {
-            return BadRequest(new { error = "Datos fuera de rango." });
+            return BadRequest(new { success = false, error = "InvalidData", message = "Datos fuera de rango." });
         }
 
         // Crear el objeto de datos del sensor
@@ -55,26 +55,22 @@ public class HomeController : Controller
         // Guardar datos en el sistema
         SensorDataManager.SetData(Id, datos);
 
-        // Activar riego si la humedad del suelo está por debajo de 30%
+        // Evaluar si es necesario activar el riego
         if (datos.HumedadSuelo < 30)
         {
-            _logger.LogInformation($"Humedad del suelo es baja ({datos.HumedadSuelo}%). Intentando activar riego para Accionador {Id}.");
+            _logger.LogInformation($"Humedad del suelo es baja ({datos.HumedadSuelo}%). Activando riego para Accionador {Id}.");
             await ActivarRiegoAsync(Id);
+
+            // Enviar respuesta de riego activado
+            return Ok(new { success = true });
         }
         else
         {
             _logger.LogInformation($"Humedad del suelo es suficiente ({datos.HumedadSuelo}%). No se activa riego para Accionador {Id}.");
-        }
 
-        // Notificar a los clientes conectados (frontend) con SignalR
-        var hubContext = HttpContext.RequestServices.GetService<IHubContext<SensorHub>>();
-        if (hubContext != null)
-        {
-            await hubContext.Clients.All.SendAsync("ActualizarInterfaz", datos);
+            // Enviar respuesta indicando que no es necesario regar
+            return Ok(new { success = false });
         }
-
-        // Devolver éxito al prototipo
-        return Ok(new { success = true });
     }
 
     // Método asincrónico para manejar el riego
@@ -97,6 +93,7 @@ public class HomeController : Controller
             _logger.LogInformation("Riego desactivado para Accionador 2");
         }
     }
+
 
     // Método para enviar datos de sensores al frontend
     [HttpGet]
